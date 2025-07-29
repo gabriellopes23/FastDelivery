@@ -20,12 +20,23 @@ class AddressDetailsModalViewController: UIViewController {
     private let complementTextField = UITextField()
     private let cepTextField = UITextField()
     private let confirmButton = UIButton(type: .system)
+    
+    var prefilledAddress: AddressModel?
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setupUI()
+
+        if let address = prefilledAddress {
+            streetTextField.text = address.street
+            numberTextField.text = address.number
+            complementTextField.text = "" // opcional
+            cepTextField.text = address.cep
+        }
     }
+
 
     private func setupUI() {
         title = "Confirmar Endereço"
@@ -73,12 +84,12 @@ class AddressDetailsModalViewController: UIViewController {
         let address = AddressModel(
             street: street,
             number: number,
-            neighborhood: "",
-            city: "",
-            cep: "",
-            type: ""
+            neighborhood: prefilledAddress?.neighborhood ?? "",
+            city: prefilledAddress?.city ?? "",
+            cep: prefilledAddress?.cep ?? "",
+            type: prefilledAddress?.type ?? "Manual"
         )
-
+        
         delegate?.didConfirmAddress(address)
         dismiss(animated: true)
     }

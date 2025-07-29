@@ -10,10 +10,32 @@ import MapKit
 import CoreLocation
 
 class AddressViewController: UIViewController, AddressDetailsModalDelegate {
+    
     func didConfirmAddress(_ address: AddressModel) {
         print("Endereço confirmado: \(address)")
+
+        // Salva para que da próxima vez vá direto para a Home
+        UserDefaults.standard.set(true, forKey: "hasAddress")
+
+        // Cria a tela principal
+        let home = TabViewController()
+        let nav = UINavigationController(rootViewController: home)
+
+        // Acessa a UIWindow da cena atual e altera a root
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let sceneDelegate = windowScene.delegate as? SceneDelegate,
+           let window = sceneDelegate.window {
+            
+            // Faz uma transição bonita (fade)
+            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromRight, animations: {
+                window.rootViewController = nav
+            }, completion: nil)
+        }
+        
+        if let encoded = try? JSONEncoder().encode(address) {
+            UserDefaults.standard.set(encoded, forKey: "userAddress")
+        }
     }
-    
 
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
@@ -25,6 +47,8 @@ class AddressViewController: UIViewController, AddressDetailsModalDelegate {
 
     private let geocoder = CLGeocoder()
     private let locationManager = CLLocationManager()
+    
+    private var suggestedAddress: AddressModel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -151,23 +175,35 @@ class AddressViewController: UIViewController, AddressDetailsModalDelegate {
         }
 
         geocoder.geocodeAddressString(text) { [weak self] placemarks, error in
-            guard let self = self, let coordinate = placemarks?.first?.location?.coordinate else {
+            guard let self = self, let placemark = placemarks?.first, let coordinate = placemark.location?.coordinate else {
                 print("Endereço não encontrado ou inválido")
                 return
             }
+            self.suggestedAddress = AddressModel(
+                street: placemark.thoroughfare ?? "",
+                number: placemark.subThoroughfare ?? "",
+                neighborhood: placemark.subLocality ?? "",
+                city: placemark.locality ?? "",
+                cep: placemark.postalCode ?? "",
+                type: "manual"
+            )
+            
             self.updateMap(coordinate: coordinate, title: "Endereço de entrega")
         }
     }
     
     @objc private func confirmLocationTapped() {
         let modal = AddressDetailsModalViewController()
-        modal.delegate = self // Para capturar o endereço completo
+        modal.delegate = self
+        modal.prefilledAddress = suggestedAddress
         modal.modalPresentationStyle = .pageSheet
         if let sheet = modal.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
         }
         present(modal, animated: true)
     }
+
+    
 
 
 
@@ -208,6 +244,14 @@ extension AddressViewController: CLLocationManagerDelegate {
             if let country = placemark.country { addressParts.append(country) }
 
             self?.addressField.text = addressParts.joined(separator: ", ")
+            
+            self?.suggestedAddress = AddressModel(
+                street: placemark.thoroughfare ?? "",
+                number: placemark.subThoroughfare ?? "",
+                neighborhood: placemark.subLocality ?? "",
+                city: placemark.locality ?? "",
+                cep: placemark.postalCode ?? "",
+                type: "gps")
         }
     }
 }

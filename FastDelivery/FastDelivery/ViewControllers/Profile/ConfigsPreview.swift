@@ -8,8 +8,10 @@
 import UIKit
 
 class ConfigsPreview: UIView {
-
+    
     private var tableView: UITableView!
+    
+    private var address: AddressModel?
     
     var data = ["Meu Endereço", "Formas de Pagamentos", "Configurações", "Ajuda"]
     
@@ -48,7 +50,7 @@ extension ConfigsPreview {
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
             tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
-           trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+            trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
             tableView.bottomAnchor.constraint(equalToSystemSpacingBelow: bottomAnchor, multiplier: 2)
         ])
     }
@@ -79,23 +81,25 @@ extension ConfigsPreview: UITableViewDelegate {
         guard let parentVC = self.parentViewController else { return }
         
         if data[indexPath.row] == "Meu Endereço" {
-            let vc = AddressViewController()
-            
-            parentVC.navigationController?.pushViewController(vc, animated: true)
-        }
-    }
-}
-
-// MARK: - ParentViewController
-extension UIView {
-    var parentViewController: UIViewController? {
-        var responder:  UIResponder? = self
-        while responder != nil {
-            if let vc = responder as? UIViewController {
-                return vc
+            if let data = UserDefaults.standard.data(forKey: "userAddress"),
+               let address = try? JSONDecoder().decode(AddressModel.self, from: data) {
+                
+                let vc = AddressDetailsViewController(address: address)
+                parentVC.navigationController?.pushViewController(vc, animated: true)
             }
-            responder = responder?.next
         }
-        return nil
     }
 }
+    // MARK: - ParentViewController
+    extension UIView {
+        var parentViewController: UIViewController? {
+            var responder:  UIResponder? = self
+            while responder != nil {
+                if let vc = responder as? UIViewController {
+                    return vc
+                }
+                responder = responder?.next
+            }
+            return nil
+        }
+    }
