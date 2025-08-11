@@ -17,6 +17,7 @@ class DeliveryView: UIView {
     
     let mainStack = UIStackView()
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -34,7 +35,7 @@ extension DeliveryView {
     private func setup() {
         titleLabel.text = "Entrega"
         
-        addressLabel.text = "Av: Paulista. 1000, Bela Vista São Paulo - 0000,00"
+//        addressLabel.text = "sem endereco"
         addressLabel.numberOfLines = 2
         
         paymentLabel.text = "Forma de pagamento - Cartão de Crédito"
@@ -77,5 +78,10 @@ extension DeliveryView {
         divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
         return divider
+    }
+    
+    func setAddress(_ address: AddressModel) {
+        addressLabel.text = "\(address.street), \(address.number)\n\(address.neighborhood) - \(address.city)\nCEP: \(address.cep)"
+        addressLabel.numberOfLines = 0
     }
 }

@@ -7,30 +7,31 @@
 
 import UIKit
 
-class CartItemCell: UICollectionViewCell {
+class CartItemCell: UITableViewCell {
     
     static let reuseID = "CartItemCell"
     
     private var item: Product?
     var onTotalPriceChanged: ((Double) -> Void)?
-    private let imageView = UIImageView()
     
+    private let imageViewCell = UIImageView()
     private let nameProductLabel = UILabel()
     private let unitValueLabel = UILabel()
     private let quantLabel = UILabel()
-    private let labelStack = UIStackView()
     
     private let totalValueLabel = UILabel()
     private let stepper = UIStepper()
-    private let totalStack = UIStackView()
     
+    private let labelStack = UIStackView()
+    private let totalStack = UIStackView()
     private let mainStack = UIStackView()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .systemGroupedBackground
         
         setup()
-        style()
+        styleCell()
     }
     
     required init?(coder: NSCoder) {
@@ -38,24 +39,20 @@ class CartItemCell: UICollectionViewCell {
     }
     
     private func setup() {
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.heightAnchor.constraint(equalToConstant: 180).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        imageView.contentMode = .scaleAspectFill
+        imageViewCell.translatesAutoresizingMaskIntoConstraints = false
+        imageViewCell.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        imageViewCell.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        imageViewCell.contentMode = .scaleAspectFill
         
-        labelStack.translatesAutoresizingMaskIntoConstraints = false
         labelStack.axis = .vertical
         labelStack.spacing = 8
-        
         labelStack.addArrangedSubview(nameProductLabel)
         labelStack.addArrangedSubview(unitValueLabel)
         labelStack.addArrangedSubview(quantLabel)
         
-        totalStack.translatesAutoresizingMaskIntoConstraints = false
         totalStack.axis = .vertical
         totalStack.spacing = 8
         totalStack.alignment = .center
-        
         totalStack.addArrangedSubview(totalValueLabel)
         totalStack.addArrangedSubview(stepper)
         
@@ -72,8 +69,7 @@ class CartItemCell: UICollectionViewCell {
         mainStack.layer.shadowRadius = 6
         mainStack.layer.shadowOpacity = 0.1
         mainStack.layer.shadowOffset = CGSize(width: 0, height: 2)
-        
-        mainStack.addArrangedSubview(imageView)
+        mainStack.addArrangedSubview(imageViewCell)
         mainStack.addArrangedSubview(labelStack)
         mainStack.addArrangedSubview(totalStack)
         
@@ -81,31 +77,27 @@ class CartItemCell: UICollectionViewCell {
         
         NSLayoutConstraint.activate([
             mainStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            mainStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            mainStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            mainStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            mainStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             mainStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
         ])
     }
     
-    private func style() {
+    private func styleCell() {
         nameProductLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         nameProductLabel.textAlignment = .center
         
         unitValueLabel.font = UIFont.systemFont(ofSize: 16)
-        quantLabel.text = "x1"
-        
-        totalValueLabel.text = item?.price
+        quantLabel.font = UIFont.systemFont(ofSize: 14)
         totalValueLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         
         stepper.minimumValue = 1
-        stepper.value = 1
         stepper.addTarget(self, action: #selector(stepperChanged(_:)), for: .valueChanged)
-        
     }
     
     func config(with item: CartItem) {
         self.item = item.produtc
-        imageView.image = UIImage(named: item.produtc.image)
+        imageViewCell.image = UIImage(named: item.produtc.image)
         nameProductLabel.text = item.produtc.title
         unitValueLabel.text = item.produtc.price
         quantLabel.text = "x\(item.quantity)"
@@ -114,24 +106,18 @@ class CartItemCell: UICollectionViewCell {
     }
     
     private func updateTotalPrice(quantity: Int) {
-            guard let item = item else { return }
-
-            // Suporte ao formato "R$180,00"
-            let priceString = item.price.replacingOccurrences(of: "R$", with: "").replacingOccurrences(of: ",", with: ".")
-            guard let unitPrice = Double(priceString) else { return }
-
-            let total = unitPrice * Double(quantity)
-            let formattedTotal = String(format: "R$%.2f", total).replacingOccurrences(of: ".", with: ",")
-            totalValueLabel.text = formattedTotal
-            onTotalPriceChanged?(total)
-        }
-}
-
-// MARK: - Actions
-extension CartItemCell {
+        guard let item = item else { return }
+        let priceString = item.price.replacingOccurrences(of: "R$", with: "").replacingOccurrences(of: ",", with: ".")
+        guard let unitPrice = Double(priceString) else { return }
+        
+        let total = unitPrice * Double(quantity)
+        let formattedTotal = String(format: "R$%.2f", total).replacingOccurrences(of: ".", with: ",")
+        totalValueLabel.text = formattedTotal
+        onTotalPriceChanged?(total)
+    }
+    
     @objc func stepperChanged(_ sender: UIStepper) {
         let value = Int(sender.value)
-    
         quantLabel.text = "x\(value)"
         updateTotalPrice(quantity: value)
         
@@ -140,3 +126,5 @@ extension CartItemCell {
         }
     }
 }
+
+

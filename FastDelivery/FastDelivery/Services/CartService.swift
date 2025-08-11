@@ -33,4 +33,10 @@ class CartService {
         // Postar notificação para atualizar o CartViewController
         NotificationCenter.default.post(name: .cartDidUpdate, object: nil)
     }
+    
+    func remove(_ product: Product) {
+        if let index = items.firstIndex(where: { $0.produtc.title == product.title}) {
+            items.remove(at: index)
+        }
+    }
 }

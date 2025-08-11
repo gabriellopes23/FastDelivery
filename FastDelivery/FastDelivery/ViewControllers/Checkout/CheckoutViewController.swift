@@ -10,7 +10,7 @@ import UIKit
 class CheckoutViewController: UIViewController {
     
     let resumoView = ResumeView()
-    let deliveryView = DeliveryView()
+    var deliveryView = DeliveryView()
     let confirmButton = UIButton(type: .system)
     
     var cartItems: [CartItem] = []
@@ -23,10 +23,15 @@ class CheckoutViewController: UIViewController {
      
         view.backgroundColor = .systemGroupedBackground
         
+        
         setup()
         layout()
         
         resumoView.checkoutProducts(cartItems: cartItems, subtotal: subtotalText, total: totalText, delivery: "R$10,00")
+        
+        if let address = loadSavedAddress() {
+               deliveryView.setAddress(address)
+           }
     }
 }
 
@@ -63,5 +68,17 @@ extension CheckoutViewController {
             confirmButton.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
             view.trailingAnchor.constraint(equalToSystemSpacingAfter: confirmButton.trailingAnchor, multiplier: 2)
         ])
+    }
+    
+    private func loadSavedAddress() -> AddressModel? {
+        if let data = UserDefaults.standard.data(forKey: "userAddress") {
+            do {
+                let address = try JSONDecoder().decode(AddressModel.self, from: data)
+                return address
+            } catch {
+                print("Erro ao decodificar endereço: \(error)")
+            }
+        }
+        return nil
     }
 }

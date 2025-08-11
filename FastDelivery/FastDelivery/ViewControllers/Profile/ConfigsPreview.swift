@@ -86,6 +86,9 @@ extension ConfigsPreview: UITableViewDelegate {
                 
                 let vc = AddressDetailsViewController(address: address)
                 parentVC.navigationController?.pushViewController(vc, animated: true)
+            } else {
+                let vc = AddressViewController()
+                parentVC.navigationController?.pushViewController(vc, animated: true)
             }
         }
     }

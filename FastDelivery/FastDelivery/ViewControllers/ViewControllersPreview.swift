@@ -9,8 +9,9 @@ import UIKit
 import SwiftUI
 
 struct ViewControllersPreview: UIViewControllerRepresentable {
+    
     func makeUIViewController(context: Context) -> some UIViewController {
-        return TabViewController()
+        return ChosePaymentViewController()
     }
     
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
@@ -25,7 +26,7 @@ struct ViewControllersPreview: UIViewControllerRepresentable {
 //struct ViewControllersPreview: UIViewRepresentable {
 //    
 //    func makeUIView(context: Context) -> some UIView {
-//        return ProfilePreview()
+//        return ChosePaymentViewController()
 //    }
 //    
 //    func updateUIView(_ uiView: UIViewType, context: Context) {

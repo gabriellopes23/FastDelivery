@@ -49,6 +49,8 @@ class AddressViewController: UIViewController, AddressDetailsModalDelegate {
     private let locationManager = CLLocationManager()
     
     private var suggestedAddress: AddressModel?
+    
+    private var showConfirmView: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -151,14 +153,14 @@ class AddressViewController: UIViewController, AddressDetailsModalDelegate {
     }
     
     private func limitMapToBrazil() {
-        let brazilCenter = CLLocationCoordinate2D(latitude: -14.2350, longitude: -51.9253) // Centro aproximado do Brasil
-        let region = MKCoordinateRegion(center: brazilCenter, latitudinalMeters: 4000000, longitudinalMeters: 4000000) // 4000km
+        let paragominasCenter = CLLocationCoordinate2D(latitude: -2.995603, longitude: -47.354879) // Centro aproximado de Paragominas
+        let region = MKCoordinateRegion(center: paragominasCenter, latitudinalMeters: 5000, longitudinalMeters: 5000) // 4000km
 
         let cameraBoundary = MKMapView.CameraBoundary(coordinateRegion: region)
         mapView.setCameraBoundary(cameraBoundary, animated: false)
         
         // Limita também o nível de zoom
-        let zoomRange = MKMapView.CameraZoomRange(maxCenterCoordinateDistance: 5000000) // até 5.000km de distância do centro
+        let zoomRange = MKMapView.CameraZoomRange(maxCenterCoordinateDistance: 5000) // até 5.000km de distância do centro
         mapView.setCameraZoomRange(zoomRange, animated: false)
     }
 
@@ -179,6 +181,15 @@ class AddressViewController: UIViewController, AddressDetailsModalDelegate {
                 print("Endereço não encontrado ou inválido")
                 return
             }
+            
+            // Adicionado log para depuração
+            print("Placemark: \(placemark)")
+            print("Thoroughfare (Rua): \(placemark.thoroughfare ?? "N/A")")
+            print("SubThoroughfare (Número): \(placemark.subThoroughfare ?? "N/A")")
+            print("SubLocality (Bairro): \(placemark.subLocality ?? "N/A")")
+            print("Locality (Cidade): \(placemark.locality ?? "N/A")")
+            print("PostalCode (CEP): \(placemark.postalCode ?? "N/A")")
+
             self.suggestedAddress = AddressModel(
                 street: placemark.thoroughfare ?? "",
                 number: placemark.subThoroughfare ?? "",
@@ -193,19 +204,26 @@ class AddressViewController: UIViewController, AddressDetailsModalDelegate {
     }
     
     @objc private func confirmLocationTapped() {
-        let modal = AddressDetailsModalViewController()
-        modal.delegate = self
-        modal.prefilledAddress = suggestedAddress
-        modal.modalPresentationStyle = .pageSheet
-        if let sheet = modal.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
+//        let modal = AddressDetailsModalViewController()
+//        modal.delegate = self
+//        modal.prefilledAddress = suggestedAddress
+//        modal.modalPresentationStyle = .pageSheet
+//        if let sheet = modal.sheetPresentationController {
+//            sheet.detents = [.medium(), .large()]
+//        }
+//        present(modal, animated: true)
+        
+        let alertView = AddressConfirmView(frame: view.bounds, prefilledAddress: suggestedAddress)
+        alertView.delegate = self
+        view.addSubview(alertView)
+        
+        alertView.alpha = 0
+        
+        UIView.animate(withDuration: 0.3) {
+            alertView.alpha = 1
         }
-        present(modal, animated: true)
+        
     }
-
-    
-
-
 
     private func updateMap(coordinate: CLLocationCoordinate2D, title: String) {
         let annotation = MKPointAnnotation()
@@ -236,6 +254,14 @@ extension AddressViewController: CLLocationManagerDelegate {
         let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         geocoder.reverseGeocodeLocation(location) { [weak self] placemarks, error in
             guard let placemark = placemarks?.first else { return }
+
+            // Adicionado log para depuração
+            print("Placemark (reverseGeocode): \(placemark)")
+            print("Thoroughfare (Rua): \(placemark.thoroughfare ?? "N/A")")
+            print("SubThoroughfare (Número): \(placemark.subThoroughfare ?? "N/A")")
+            print("SubLocality (Bairro): \(placemark.subLocality ?? "N/A")")
+            print("Locality (Cidade): \(placemark.locality ?? "N/A")")
+            print("PostalCode (CEP): \(placemark.postalCode ?? "N/A")")
 
             var addressParts = [String]()
             if let name = placemark.name { addressParts.append(name) }
