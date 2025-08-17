@@ -150,6 +150,11 @@ extension Checkout {
     @objc func chosePaymentMethod() {
         let vc = ChosePaymentViewController()
         
+        vc.onPaymenteSelected = { [weak self] image, title in
+            self?.imagePayment.image = image
+            self?.typePayment.text = title
+        }
+        
         navigationController?.pushViewController(vc, animated: true)
     }
 }

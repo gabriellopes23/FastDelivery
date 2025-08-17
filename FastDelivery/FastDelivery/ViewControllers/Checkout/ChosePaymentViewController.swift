@@ -30,6 +30,8 @@ class ChosePaymentViewController: UIViewController {
     
     var selectedRow: UIStackView?
     
+    var onPaymenteSelected: ((UIImage?, String) -> Void)?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -138,5 +140,12 @@ extension ChosePaymentViewController {
         tappedRow.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.1)
         
         selectedRow = tappedRow
+        
+        if let imgView = tappedRow.arrangedSubviews.first as? UIImageView,
+           let titleLabel = tappedRow.arrangedSubviews.last as? UILabel {
+            onPaymenteSelected?(imgView.image, titleLabel.text ?? "")
+            
+            navigationController?.popViewController(animated: true)
+        }
     }
 }
