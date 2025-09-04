@@ -1,13 +1,13 @@
 //
-//  MapViewController.swift
+//  Profile.swift
 //  FastDelivery
 //
-//  Created by Gabriel Lopes on 12/08/25.
+//  Created by Gabriel Lopes on 30/08/25.
 //
 
 import UIKit
 
-class MapViewController: UIViewController {
+class Profile: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

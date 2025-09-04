@@ -82,13 +82,14 @@ class AddressDetailsModalViewController: UIViewController {
         }
 
         let address = AddressModel(
-            street: street,
-            number: number,
-            neighborhood: prefilledAddress?.neighborhood ?? "",
-            city: prefilledAddress?.city ?? "",
-            cep: prefilledAddress?.cep ?? "",
-            type: prefilledAddress?.type ?? "Manual"
-        )
+            street: "",
+            number: "",
+            neighborhood: "",
+            city: "",
+            state: "",
+            cep: "",
+            country: "",
+            type: "")
         
         delegate?.didConfirmAddress(address)
         dismiss(animated: true)

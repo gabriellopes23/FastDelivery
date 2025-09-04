@@ -12,6 +12,8 @@ struct AddressModel: Codable {
     let number: String
     let neighborhood: String
     let city: String
+    let state: String
     let cep: String
+    let country: String
     let type: String
 }

@@ -190,14 +190,14 @@ class AddressViewController: UIViewController, AddressDetailsModalDelegate {
             print("Locality (Cidade): \(placemark.locality ?? "N/A")")
             print("PostalCode (CEP): \(placemark.postalCode ?? "N/A")")
 
-            self.suggestedAddress = AddressModel(
-                street: placemark.thoroughfare ?? "",
-                number: placemark.subThoroughfare ?? "",
-                neighborhood: placemark.subLocality ?? "",
-                city: placemark.locality ?? "",
-                cep: placemark.postalCode ?? "",
-                type: "manual"
-            )
+//            self.suggestedAddress = AddressModel(
+//                street: placemark.thoroughfare ?? "",
+//                number: placemark.subThoroughfare ?? "",
+//                neighborhood: placemark.subLocality ?? "",
+//                city: placemark.locality ?? "",
+//                cep: placemark.postalCode ?? "",
+//                type: "manual"
+//            )
             
             self.updateMap(coordinate: coordinate, title: "Endereço de entrega")
         }
@@ -271,13 +271,13 @@ extension AddressViewController: CLLocationManagerDelegate {
 
             self?.addressField.text = addressParts.joined(separator: ", ")
             
-            self?.suggestedAddress = AddressModel(
-                street: placemark.thoroughfare ?? "",
-                number: placemark.subThoroughfare ?? "",
-                neighborhood: placemark.subLocality ?? "",
-                city: placemark.locality ?? "",
-                cep: placemark.postalCode ?? "",
-                type: "gps")
+//            self?.suggestedAddress = AddressModel(
+//                street: placemark.thoroughfare ?? "",
+//                number: placemark.subThoroughfare ?? "",
+//                neighborhood: placemark.subLocality ?? "",
+//                city: placemark.locality ?? "",
+//                cep: placemark.postalCode ?? "",
+//                type: "gps")
         }
     }
 }

@@ -11,7 +11,7 @@ import SwiftUI
 struct ViewControllersPreview: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> some UIViewController {
-        return ChosePaymentViewController()
+        return MapViewController()
     }
     
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {

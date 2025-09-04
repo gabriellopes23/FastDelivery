@@ -153,6 +153,24 @@ extension Checkout {
         vc.onPaymenteSelected = { [weak self] image, title in
             self?.imagePayment.image = image
             self?.typePayment.text = title
+            
+            if title == "Dinheiro" {
+                let alert = UIAlertController(title: "Vai precisar de troco?", message: "Digite o valor que você vai pagar em dinheiro, pra que a pessoa que for entregar seu pedido leve o troco pra você.", preferredStyle: .alert)
+                
+                alert.addTextField { textField in
+                    textField.placeholder = "Value"
+                    textField.keyboardType = .decimalPad
+                }
+                
+                alert.addAction(UIAlertAction(title: "Confirmar", style: .default, handler: { _ in
+                    let valor = alert.textFields?.first?.text
+                    print("Valor informado: \(valor ?? "")")
+                }))
+                
+                alert.addAction(UIAlertAction(title: "Não quero troco", style: .destructive, handler: nil))
+                
+                self?.present(alert, animated: true, completion: nil)
+            }
         }
         
         navigationController?.pushViewController(vc, animated: true)

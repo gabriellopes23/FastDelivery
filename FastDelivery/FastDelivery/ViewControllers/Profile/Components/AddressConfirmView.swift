@@ -155,13 +155,14 @@ extension AddressConfirmView {
     
     @objc func confirmLocationTapped() {
         let address = AddressModel(
-            street: prefilledAddress?.street ?? "",
-            number: prefilledAddress?.number ?? "",
-            neighborhood: prefilledAddress?.neighborhood ?? "",
-            city: prefilledAddress?.city ?? "",
-            cep: prefilledAddress?.cep ?? "",
-            type: prefilledAddress?.type ?? "Manual"
-        )
+            street: "",
+            number: "",
+            neighborhood: "",
+            city: "",
+            state: "",
+            cep: "",
+            country: "",
+            type: "")
         
         delegate?.didConfirmAddress(address)
     }
