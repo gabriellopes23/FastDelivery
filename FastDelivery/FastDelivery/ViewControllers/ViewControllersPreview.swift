@@ -8,28 +8,13 @@
 import UIKit
 import SwiftUI
 
-struct ViewControllersPreview: UIViewControllerRepresentable {
-    
-    func makeUIViewController(context: Context) -> some UIViewController {
-        return MapViewController()
-    }
-    
-    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-        // Nothing
-    }
-}
-
-#Preview(body: {
-    ViewControllersPreview()
-})
-
-//struct ViewControllersPreview: UIViewRepresentable {
+//struct ViewControllersPreview: UIViewControllerRepresentable {
 //    
-//    func makeUIView(context: Context) -> some UIView {
-//        return ChosePaymentViewController()
+//    func makeUIViewController(context: Context) -> some UIViewController {
+//        return Profile()
 //    }
 //    
-//    func updateUIView(_ uiView: UIViewType, context: Context) {
+//    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
 //        // Nothing
 //    }
 //}
@@ -37,3 +22,18 @@ struct ViewControllersPreview: UIViewControllerRepresentable {
 //#Preview(body: {
 //    ViewControllersPreview()
 //})
+
+struct ViewControllersPreview: UIViewRepresentable {
+    
+    func makeUIView(context: Context) -> some UIView {
+        return AddressView()
+    }
+    
+    func updateUIView(_ uiView: UIViewType, context: Context) {
+        // Nothing
+    }
+}
+
+#Preview(body: {
+    ViewControllersPreview()
+})

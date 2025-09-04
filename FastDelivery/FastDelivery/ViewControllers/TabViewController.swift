@@ -19,7 +19,7 @@ class TabViewController: UITabBarController {
     private func setupTabs() {
         let home = createNav(with: "Home", and: UIImage(systemName: "house"), vc: HomeViewController())
         let cart = createNav(with: "Cart", and: UIImage(systemName: "cart"), vc: CartViewController())
-        let perfil = createNav(with: "Perfil", and: UIImage(systemName: "person.fill"), vc: ProfileViewController())
+        let perfil = createNav(with: "Perfil", and: UIImage(systemName: "person.fill"), vc: Profile())
         
         self.setViewControllers([home, cart, perfil], animated: true)
     }

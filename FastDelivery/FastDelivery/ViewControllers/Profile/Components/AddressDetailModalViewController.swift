@@ -8,7 +8,7 @@
 import UIKit
 
 protocol AddressDetailsModalDelegate: AnyObject {
-    func didConfirmAddress(_ address: AddressModel)
+    func didConfirmAddress(_ address: String)
 }
 
 class AddressDetailsModalViewController: UIViewController {
@@ -21,7 +21,7 @@ class AddressDetailsModalViewController: UIViewController {
     private let cepTextField = UITextField()
     private let confirmButton = UIButton(type: .system)
     
-    var prefilledAddress: AddressModel?
+    var prefilledAddress: String?
 
 
     override func viewDidLoad() {
@@ -29,12 +29,12 @@ class AddressDetailsModalViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setupUI()
 
-        if let address = prefilledAddress {
-            streetTextField.text = address.street
-            numberTextField.text = address.number
-            complementTextField.text = "" // opcional
-            cepTextField.text = address.cep
-        }
+//        if let address = prefilledAddress {
+//            streetTextField.text = address.street
+//            numberTextField.text = address.number
+//            complementTextField.text = "" // opcional
+//            cepTextField.text = address.cep
+//        }
     }
 
 
@@ -81,17 +81,17 @@ class AddressDetailsModalViewController: UIViewController {
             return
         }
 
-        let address = AddressModel(
-            street: "",
-            number: "",
-            neighborhood: "",
-            city: "",
-            state: "",
-            cep: "",
-            country: "",
-            type: "")
+//        let address = AddressModel(
+//            street: "",
+//            number: "",
+//            neighborhood: "",
+//            city: "",
+//            state: "",
+//            cep: "",
+//            country: "",
+//            type: "")
         
-        delegate?.didConfirmAddress(address)
+//        delegate?.didConfirmAddress(address)
         dismiss(animated: true)
     }
 

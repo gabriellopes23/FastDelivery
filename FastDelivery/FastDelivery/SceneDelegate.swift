@@ -19,14 +19,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
-//        let userDefaults = UserDefaults.standard
-//        if userDefaults.bool(forKey: "hasAddress") {
-//            window.rootViewController = UINavigationController(rootViewController: TabViewController())
-//        } else {
-//            window.rootViewController = UINavigationController(rootViewController: AddressViewController())
-//        }
-        
-        window.rootViewController = MapViewController()
+        let userDefaults = UserDefaults.standard
+        if userDefaults.bool(forKey: "hasAddress") {
+            window.rootViewController = UINavigationController(rootViewController: TabViewController())
+        } else {
+            window.rootViewController = UINavigationController(rootViewController: MapViewController())
+        }
         
         window.backgroundColor = .systemGroupedBackground
         window.makeKeyAndVisible()

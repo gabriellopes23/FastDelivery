@@ -33,9 +33,14 @@ class AddressConfirmView: UIView {
         return UIVisualEffectView(effect: blurEffect)
     }()
     
-    init(frame: CGRect, prefilledAddress: AddressModel?) {
+    init(frame: CGRect, prefilledAddress: AddressModel?, fullAddressText: String?) {
         self.prefilledAddress = prefilledAddress
         super.init(frame: frame)
+        
+        
+        if let text = fullAddressText {
+            streetLabel.text = text
+        }
         
         blurView.frame = bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -81,8 +86,10 @@ class AddressConfirmView: UIView {
         titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         
         
-        streetLabel.textColor = .blueColorPersonalizado
+        streetLabel.textColor = .secondaryLabel
+        streetLabel.textAlignment = .center
         streetLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        streetLabel.numberOfLines = 0
         
         neighborhoodLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         neighborhoodLabel.textColor = .gray
@@ -125,7 +132,7 @@ class AddressConfirmView: UIView {
             
             referenceTextField.leadingAnchor.constraint(equalToSystemSpacingAfter: stackView.leadingAnchor, multiplier: 2),
             stackView.trailingAnchor.constraint(equalToSystemSpacingAfter: referenceTextField.trailingAnchor, multiplier: 2),
-        
+            
             confirmButton.leadingAnchor.constraint(equalToSystemSpacingAfter: stackView.leadingAnchor, multiplier: 2),
             stackView.trailingAnchor.constraint(equalToSystemSpacingAfter: confirmButton.trailingAnchor, multiplier: 2),
         ])
@@ -141,10 +148,10 @@ class AddressConfirmView: UIView {
     
     private func fillAddress() {
         guard let address = prefilledAddress else { return }
-        streetLabel.text = "\(address.street), \(address.number)"
-        neighborhoodLabel.text = "\(address.neighborhood), \(address.city), \(address.cep)"
+        //        streetLabel.text = "\(address.street), \(address.number)"
+        //        neighborhoodLabel.text = "\(address.neighborhood), \(address.city), \(address.cep)"
     }
-
+    
 }
 
 // MARK: - Actions
@@ -154,16 +161,16 @@ extension AddressConfirmView {
     }
     
     @objc func confirmLocationTapped() {
-        let address = AddressModel(
-            street: "",
-            number: "",
-            neighborhood: "",
-            city: "",
-            state: "",
-            cep: "",
-            country: "",
-            type: "")
+//        let address = AddressModel(
+//            street: prefilledAddress?.street ?? "",
+//            number: prefilledAddress?.number ?? "",
+//            neighborhood: prefilledAddress?.neighborhood ?? "",
+//            city: prefilledAddress?.city ?? "",
+//            state: prefilledAddress?.state ?? "",
+//            cep: prefilledAddress?.cep ?? "",
+//            country: prefilledAddress?.country ?? "",
+//            type: "")
         
-        delegate?.didConfirmAddress(address)
+        delegate?.didConfirmAddress(streetLabel.text ?? "")
     }
 }

@@ -10,32 +10,36 @@ import MapKit
 import CoreLocation
 
 class AddressViewController: UIViewController, AddressDetailsModalDelegate {
-    
-    func didConfirmAddress(_ address: AddressModel) {
-        print("Endereço confirmado: \(address)")
-
-        // Salva para que da próxima vez vá direto para a Home
-        UserDefaults.standard.set(true, forKey: "hasAddress")
-
-        // Cria a tela principal
-        let home = TabViewController()
-        let nav = UINavigationController(rootViewController: home)
-
-        // Acessa a UIWindow da cena atual e altera a root
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let sceneDelegate = windowScene.delegate as? SceneDelegate,
-           let window = sceneDelegate.window {
-            
-            // Faz uma transição bonita (fade)
-            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromRight, animations: {
-                window.rootViewController = nav
-            }, completion: nil)
-        }
+    func didConfirmAddress(_ address: String) {
         
-        if let encoded = try? JSONEncoder().encode(address) {
-            UserDefaults.standard.set(encoded, forKey: "userAddress")
-        }
     }
+    
+    
+//    func didConfirmAddress(_ address: AddressModel) {
+//        print("Endereço confirmado: \(address)")
+//
+//        // Salva para que da próxima vez vá direto para a Home
+//        UserDefaults.standard.set(true, forKey: "hasAddress")
+//
+//        // Cria a tela principal
+//        let home = TabViewController()
+//        let nav = UINavigationController(rootViewController: home)
+//
+//        // Acessa a UIWindow da cena atual e altera a root
+//        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+//           let sceneDelegate = windowScene.delegate as? SceneDelegate,
+//           let window = sceneDelegate.window {
+//            
+//            // Faz uma transição bonita (fade)
+//            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromRight, animations: {
+//                window.rootViewController = nav
+//            }, completion: nil)
+//        }
+//        
+//        if let encoded = try? JSONEncoder().encode(address) {
+//            UserDefaults.standard.set(encoded, forKey: "userAddress")
+//        }
+//    }
 
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
@@ -213,7 +217,7 @@ class AddressViewController: UIViewController, AddressDetailsModalDelegate {
 //        }
 //        present(modal, animated: true)
         
-        let alertView = AddressConfirmView(frame: view.bounds, prefilledAddress: suggestedAddress)
+        let alertView = AddressConfirmView(frame: view.bounds, prefilledAddress: suggestedAddress, fullAddressText: "")
         alertView.delegate = self
         view.addSubview(alertView)
         

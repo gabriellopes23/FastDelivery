@@ -82,27 +82,14 @@ extension ConfigsPreview: UITableViewDelegate {
         
         if data[indexPath.row] == "Meu Endereço" {
             if let data = UserDefaults.standard.data(forKey: "userAddress"),
-               let address = try? JSONDecoder().decode(AddressModel.self, from: data) {
+               let address = try? JSONDecoder().decode(String.self, from: data) {
                 
                 let vc = AddressDetailsViewController(address: address)
                 parentVC.navigationController?.pushViewController(vc, animated: true)
             } else {
-                let vc = AddressViewController()
+                let vc = MapViewController()
                 parentVC.navigationController?.pushViewController(vc, animated: true)
             }
         }
     }
 }
-    // MARK: - ParentViewController
-    extension UIView {
-        var parentViewController: UIViewController? {
-            var responder:  UIResponder? = self
-            while responder != nil {
-                if let vc = responder as? UIViewController {
-                    return vc
-                }
-                responder = responder?.next
-            }
-            return nil
-        }
-    }
